@@ -16,14 +16,14 @@ const client = mozaik => {
     AWS.config.setPromisesDependency(require('bluebird'));      // unnecessary ?
 
     // AWS.config.region = config.get('aws.region');
-    AWS.config.update({ region: config.get('aws.region') });    // unnecessary ?
-
-    const awsBudgets = new AWS.Budgets({apiVersion: '2016-10-20'});
+    AWS.config.update({ region: config.get('aws.region') });    // necessary only for some services
 
     const apiMethods = {
+        // does not work with AWS linked accounts
         budgets() {
+            const awsBudgets = new AWS.Budgets({apiVersion: '2016-10-20'});
+
             const accId = config.get('aws.accountID');
-            mozaik.logger.info(`accID: ${accId}`);
 
             const params = {
                 AccountId:  accId, /* required */
@@ -33,7 +33,7 @@ const client = mozaik => {
 
             return awsBudgets.describeBudgets(params).promise()
                 .then(
-                    budgets => { mozaik.logger.error(chalk.red(`we got this: ${JSON.stringify(budgets)}, ${typeof budgets}`)); return budgets },
+                    budgets => { mozaik.logger.info(chalk.yellow(`we got this: ${JSON.stringify(budgets)}, ${typeof budgets}`)); return budgets },
                     error => { 
                         if (error.message)
                             mozaik.logger.error(chalk.red(`${JSON.stringify(error.message)}`)); 
@@ -42,14 +42,13 @@ const client = mozaik => {
                 );
         },
 
-        csv() {
+        csvReport() {
+            mozaik.logger.info(chalk.yellow(`[aws] processing csvReport`));
+
             const def = Promise.defer();
             let costs = {};
 
-            csv({
-                quote: 'off'
-            })
-            .fromStream(fs.createReadStream('costsMonthlyByService.csv'))
+            csv().fromStream(fs.createReadStream('costsMonthlyByService.csv'))
             .on('json', (jsonObj, rowIndex) => {
                 costs[`${rowIndex}`] = jsonObj;
             })
@@ -59,9 +58,8 @@ const client = mozaik => {
             })
             .on('done', error => {
                 if(error)
-                    def.reject(error);
-                else
-                    def.resolve(costs);
+                    return def.reject(error);
+                def.resolve(costs);
             });
 
             return def.promise;
