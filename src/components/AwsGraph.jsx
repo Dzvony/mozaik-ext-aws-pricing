@@ -133,7 +133,7 @@ AwsGraph.propTypes = {
   innerRadius: PropTypes.number,
   transitionDuration: PropTypes.number,
   idleCycles: PropTypes.number
-}
+};
 
 
 reactMixin(AwsGraph.prototype, ListenerMixin);

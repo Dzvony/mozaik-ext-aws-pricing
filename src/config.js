@@ -13,6 +13,12 @@ const config = convict({
             default: null,
             format:  String,
             env:     'AWS_ACCOUNT_ID'
+        },
+        sourcePath: {
+            doc:     'Path to CSV file that contains costs data.',
+            default: null,
+            format:  String,
+            env:     'AWS_SOURCE_PATH'
         }
     }
 });

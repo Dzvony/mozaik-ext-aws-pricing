@@ -45,10 +45,11 @@ const client = mozaik => {
         csvReport() {
             mozaik.logger.info(chalk.yellow(`[aws] processing csvReport`));
 
+            const path = config.get('aws.sourcePath');
             const def = Promise.defer();
             let costs = {};
 
-            csv().fromStream(fs.createReadStream('costsMonthlyByService.csv'))
+            csv().fromStream(fs.createReadStream(path))
             .on('json', (jsonObj, rowIndex) => {
                 costs[`${rowIndex}`] = jsonObj;
             })
