@@ -8,8 +8,8 @@ class PieLegends extends Component {
         const legendNodes = legends.map(legend => (
             <span key={legend.id} className="fancy_pie_legends_item">
                 <span className="fancy_pie_legends_item_color" style={{ background: legend.color }}/>
-                <span className="fancy_pie_legends_item_count">{legend.count}</span>
                 <span className="fancy_pie_legends_item_label">{legend.label}</span>
+                <span className="fancy_pie_legends_item_count">{legend.count}</span>
             </span>
         ));
 
