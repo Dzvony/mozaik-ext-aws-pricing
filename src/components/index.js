@@ -1,5 +1,7 @@
-import AwsGraph from './AwsGraph.jsx';
+import AwsMonthByService from './AwsMonthByService.jsx';
+import AwsMonthToDate from './AwsMonthToDate.jsx';
 
 export default {
-    AwsGraph
+    AwsMonthByService,
+    AwsMonthToDate
 };

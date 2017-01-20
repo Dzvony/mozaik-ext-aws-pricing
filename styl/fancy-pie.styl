@@ -1,0 +1,102 @@
+.fancy_pie
+  position relative
+  width  100%
+  height 100%
+  overflow hidden
+
+  &_chart
+    position relative
+    float left
+    width  60%
+    height 100%
+
+    &_wrapper
+      width  100%
+      height 100%
+
+  &_outline
+    fill         $pie-chart-outline-fill
+    stroke       $pie-chart-outline-stroke
+    stroke-width $pie-chart-outline-stroke-width
+
+  &_svg_legend
+    rect, path
+      fill   $pie-svg-legend-bg-color
+      stroke none
+
+    text
+      font-size 1.6vmin
+      fill $pie-svg-legend-txt-color
+
+  &_legends
+    float left
+    width  40%
+    height 100%
+    padding 2vmin
+    display -webkit-flex
+    display flex
+    -webkit-flex-direction column
+    flex-direction         column
+    -webkit-justify-content center
+    justify-content         center
+
+    &_item
+      position relative
+      display block
+      white-space pre
+      vertical-align middle
+      margin-bottom 0.6vmin
+      width 100%
+
+      &_count
+        display inline-block
+        position relative
+        float right
+        background-color #1e2836
+        font-family Helvetica, sans-serif;
+        padding 1px 7px
+        border-radius 0.4vmin
+
+      &_color
+        display inline-block
+        width  3vmin
+        height 3vmin
+        vertical-align middle
+        border-radius 0vmin
+        margin-right 1vmin
+
+      &_label
+        display inline-block
+        vertical-align middle
+
+  &_overlay
+    position absolute
+    top  0
+    left 0
+    width  100%
+    height 100%
+    display -webkit-flex
+    display flex
+    -webkit-align-items center
+    align-items         center
+    -webkit-justify-content center
+    justify-content         center
+
+  &_count
+    line-height 1em
+    text-align center
+    &_value
+      font-size 6vmin
+    &_unit
+      font-size 3vmin
+    &_label
+      display block
+      margin-top 1vmin
+
+  &_gauge
+    &_needle
+      &_base
+        fill $pie-gauge-needle-color
+
+      &_arrow
+        fill $pie-gauge-needle-color

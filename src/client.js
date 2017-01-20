@@ -1,10 +1,8 @@
-import request from 'superagent';
 import config  from './config';
 import Promise from 'bluebird';
 import chalk   from 'chalk';
 
 var AWS = require('aws-sdk');
-require('superagent-bluebird-promise');
 const csv = require('csvtojson');
 const fs  = require('fs');
 
@@ -12,15 +10,15 @@ const client = mozaik => {
 
     mozaik.loadApiConfig(config);
 
-    // worked even without this
-    AWS.config.setPromisesDependency(require('bluebird'));      // unnecessary ?
-
-    // AWS.config.region = config.get('aws.region');
-    AWS.config.update({ region: config.get('aws.region') });    // necessary only for some services
-
     const apiMethods = {
-        // does not work with AWS linked accounts
+        // component development abandoned
+        // this service does not work with AWS linked accounts
         budgets() {
+            AWS.config.update({ region: config.get('aws.region') });    // necessary only for some services (maybe not budgets)
+
+            // worked even without this
+            AWS.config.setPromisesDependency(require('bluebird'));      // unnecessary ?
+
             const awsBudgets = new AWS.Budgets({apiVersion: '2016-10-20'});
 
             const accId = config.get('aws.accountID');
@@ -32,18 +30,21 @@ const client = mozaik => {
             };
 
             return awsBudgets.describeBudgets(params).promise()
-                .then(
-                    budgets => { mozaik.logger.info(chalk.yellow(`we got this: ${JSON.stringify(budgets)}, ${typeof budgets}`)); return budgets },
-                    error => { 
-                        if (error.message)
-                            mozaik.logger.error(chalk.red(`${JSON.stringify(error.message)}`)); 
-                        return Promise.reject(error);
-                    }
-                );
+            .then(
+                budgets => {
+                    mozaik.logger.info(chalk.yellow(`[aws] budgets fetched successfully`));
+                    return budgets
+                },
+                error => { 
+                    if (error.message)
+                        mozaik.logger.error(chalk.red(`${JSON.stringify(error.message)}`)); 
+                    return Promise.reject(error);
+                }
+            );
         },
 
-        csvReport() {
-            mozaik.logger.info(chalk.yellow(`[aws] processing csvReport`));
+        csvReportMonths() {
+            mozaik.logger.info(chalk.yellow(`[aws] processing csvReportMonths`));
 
             const path = config.get('aws.sourcePath');
             const def = Promise.defer();
