@@ -11,19 +11,19 @@ const config = convict({
         },
         accountID: {
             doc:     'Identifier of user account. 12 digits.',
-            default: null,
+            default: '',
             format:  String,
             env:     'AWS_ACCOUNT_ID'
         },
         s3bucket: {
             doc:     'AWS S3 bucket name',
-            default: null,
+            default: '',
             format:  String,
             env:     'AWS_S3_BUCKET'
         },
         s3keyMonthByService: {
             doc:     'AWS S3 key of report',
-            default: null,
+            default: '',
             format:  String,
             env:     'AWS_S3_KEY_MONTH_BY_SERVICE'
         }
