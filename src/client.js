@@ -1,6 +1,7 @@
 import config  from './config';
 import Promise from 'bluebird';
 import chalk   from 'chalk';
+import { Readable } from 'stream';
 
 var AWS = require('aws-sdk');
 const csv = require('csvtojson');
@@ -46,25 +47,43 @@ const client = mozaik => {
         csvReportMonths() {
             mozaik.logger.info(chalk.yellow(`[aws] processing csvReportMonths`));
 
-            const path = config.get('aws.sourcePath');
-            const def = Promise.defer();
-            let costs = {};
+            const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
-            csv().fromStream(fs.createReadStream(path))
-            .on('json', (jsonObj, rowIndex) => {
-                costs[`${rowIndex}`] = jsonObj;
-            })
-            .on('error', err => {
-                console.log(`err ${err}`);
-                def.reject(err);
-            })
-            .on('done', error => {
-                if(error)
-                    return def.reject(error);
-                def.resolve(costs);
-            });
+            const params = {
+                Bucket: config.get('aws.s3bucket'),
+                Key: config.get('aws.s3keyMonthByService')
+            }
 
-            return def.promise;
+            return s3.getObject(params).promise()
+            .then(
+                yep => {
+                    const s = new Readable();
+                    s.push(yep.Body.toString());
+                    s.push(null);
+
+                    const def = Promise.defer();
+                    let costs = {};
+
+                    csv().fromStream(s)
+                    .on('json', (jsonObj, rowIndex) => {
+                        costs[`${rowIndex}`] = jsonObj;
+                    })
+                    .on('error', err => {
+                        console.log(`err ${err}`);
+                        def.reject(err);
+                    })
+                    .on('done', error => {
+                        if(error)
+                            return def.reject(error);
+                        def.resolve(costs);
+                    });
+
+                    return def.promise;
+                },
+                nope => {
+                    return Promise.reject({nope, status: 1234});    // still does not work for Mozaik Bus, aint nobody got time for that
+                }
+            )
         }
     };
 

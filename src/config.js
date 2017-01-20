@@ -1,3 +1,4 @@
+require('dotenv').load();
 import convict from 'convict';
 
 const config = convict({
@@ -14,11 +15,17 @@ const config = convict({
             format:  String,
             env:     'AWS_ACCOUNT_ID'
         },
-        sourcePath: {
-            doc:     'Path to CSV file that contains costs data.',
+        s3bucket: {
+            doc:     'AWS S3 bucket name',
             default: null,
             format:  String,
-            env:     'AWS_SOURCE_PATH'
+            env:     'AWS_S3_BUCKET'
+        },
+        s3keyMonthByService: {
+            doc:     'AWS S3 key of report',
+            default: null,
+            format:  String,
+            env:     'AWS_S3_KEY_MONTH_BY_SERVICE'
         }
     }
 });
