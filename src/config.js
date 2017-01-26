@@ -1,4 +1,4 @@
-require('dotenv').load();
+// require('dotenv').load();
 import convict from 'convict';
 
 const config = convict({
@@ -10,7 +10,7 @@ const config = convict({
             env:     'AWS_REGION'
         },
         accountID: {
-            doc:     'Identifier of user account. 12 digits.',
+            doc:     'Identifier of user\'s AWS account. 12 digits.',
             default: '',
             format:  String,
             env:     'AWS_ACCOUNT_ID'
@@ -26,7 +26,14 @@ const config = convict({
             default: '',
             format:  String,
             env:     'AWS_S3_KEY_MONTH_BY_SERVICE'
-        }
+        },
+        // default will be one hour in milliseconds
+        s3pollInterval: {
+            doc:     'AWS amount of miliseconds to check',
+            default: 3600000,
+            format:  Number,
+            env:     'AWS_S3_POLL_INTERVAL'
+        },
     }
 });
 

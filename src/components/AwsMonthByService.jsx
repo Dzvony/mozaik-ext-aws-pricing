@@ -10,7 +10,7 @@ class AwsMonthByService extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { 
+    this.state = {
       data: [],
       colors: ['#383878',  '#4F548C', '#376CAE', '#5F8BC2', '#6AC5CA'], // TODO: find more colours
       colorPick: 0,
@@ -20,9 +20,9 @@ class AwsMonthByService extends Component {
   }
 
   getApiRequest() {
-    // const {  } = this.props;
-    
-    return { id: 'aws.csvReportMonths' };
+    return {
+      id: 'aws.csvReportMonths'
+    };
   }
 
   onApiData(costs) {
@@ -34,6 +34,7 @@ class AwsMonthByService extends Component {
     // choice 1, 2, 3... - particular month with costs by service
     //        1 - the most recent month
     //        2 - second most recent month ...
+    //        12 - should be last index (12th most recent month)
     if(_.has(costs, `${choice}`)){
       let otherCosts = 0.0;
       
@@ -41,7 +42,7 @@ class AwsMonthByService extends Component {
         if(key.match(/^Service/)) {
           if(value.match(/Service Total/g)){
             // this row contains Total Costs for whole measured time of report
-            this.state.billingPeriod = 'last 12 months';
+            this.state.billingPeriod = '12 previous months';
           }
           else{
             // date is here
@@ -51,7 +52,7 @@ class AwsMonthByService extends Component {
         }
         if(key.match(/^Total cost/)) {
           // total cost is here
-          this.state.totalCost = parseFloat(value).toFixed(2);
+          this.state.totalCost = Number(parseFloat(value).toFixed(2));
           return;
         }
 
@@ -150,7 +151,6 @@ AwsMonthByService.propTypes = {
   title: PropTypes.string,
   innerRadius: PropTypes.number,
   transitionDuration: PropTypes.number,
-  // apiPollCyclesIdle: PropTypes.number
 };
 
 AwsMonthByService.defaultProps = {
