@@ -38,12 +38,14 @@ const config = convict({
         awsAccessKeyId: {
             doc:     'AWS access key of IAM user used by aws-sdk',
             default: null,
-            format:  String
+            format:  String,
+            env:     'AWS_MOZAIK_DASHBOARD_ACCESS_KEY_ID'
         },
         awsSecretAccessKey: {
             doc:     'AWS secret access key of IAM user for aws-sdk',
             default: null,
-            format:  String
+            format:  String,
+            env:    'AWS_MOZAIK_DASHBOARD_SECRET_ACCESS_KEY'
         }
     }
 });
