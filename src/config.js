@@ -1,14 +1,15 @@
-// require('dotenv').load();
 import convict from 'convict';
 
 const config = convict({
     aws: {
+        // not in use
         region: {
             doc:     'The AWS region.',
             default: 'eu-west-1',
             format:  String,
             env:     'AWS_REGION'
         },
+        // not in use
         accountID: {
             doc:     'Identifier of user\'s AWS account. 12 digits.',
             default: '',
@@ -34,6 +35,16 @@ const config = convict({
             format:  Number,
             env:     'AWS_S3_POLL_INTERVAL'
         },
+        awsAccessKeyId: {
+            doc:     'AWS access key of IAM user used by aws-sdk',
+            default: null,
+            format:  String
+        },
+        awsSecretAccessKey: {
+            doc:     'AWS secret access key of IAM user for aws-sdk',
+            default: null,
+            format:  String
+        }
     }
 });
 

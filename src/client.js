@@ -12,7 +12,10 @@ const client = mozaik => {
     let csvReportMonthsTimer = null;
     let csvReportMonthsFirstSubscription = true;
 
-    mozaik.loadApiConfig(config);   // trigger validation of local config
+    mozaik.loadApiConfig(config);
+
+    process.env.AWS_ACCESS_KEY_ID = config.get('aws.awsAccessKeyId');
+    process.env.AWS_SECRET_ACCESS_KEY = config.get('aws.awsSecretAccessKey');
 
     const pushCsvReportMonths = (callback, requestId) => {
         mozaik.logger.info(chalk.green(`[aws] pushCsvReportMonths (mode PUSH) processing...`));
