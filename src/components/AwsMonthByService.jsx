@@ -60,10 +60,9 @@ class AwsMonthByService extends Component {
         //   -> accumulate them into 'otherCosts' value
         if(parseFloat(value) > minMeaningfulCost){
           // remove currency from key name
-          const keyParts = key.split(/\s+/);
-          if (keyParts[keyParts.length - 1].match(/^\([\s\S]*\)$/)){
-            keyParts.pop();
-            key = keyParts.join(' ');
+          const currencyIndex = key.lastIndexOf('($)');
+          if (currencyIndex != -1){
+            key = key.substr(0, currencyIndex).trim();
           }
 
           data.push({
