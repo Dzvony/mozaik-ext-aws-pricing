@@ -12,7 +12,7 @@ class AwsMonthByService extends Component {
 
     this.state = {
       data: [],
-      colors: ['#383878',  '#4F548C', '#376CAE', '#5F8BC2', '#6AC5CA'], // TODO: find more colours
+      colors: ['#383878', '#444A8C', '#4F5BA0', '#476CB5', '#5886CA', '#78A0E6', '#81BBE0', '#AAD5EE'], // TODO: adjust colours
       colorPick: 0,
       totalCost: 0,
       billingPeriod: ''
