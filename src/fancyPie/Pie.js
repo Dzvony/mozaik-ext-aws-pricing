@@ -130,6 +130,7 @@ class Pie {
                 this._current = Pie.findNeighborArc(i, prevData, newData) || d;
             })
             .attr('fill', d => d.data.color)
+            .attr('id', d => `svg_${d.data.id}`)
         ;
 
         this.arcsOutline.attr('d', arc({
